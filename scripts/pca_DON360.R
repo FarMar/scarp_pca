@@ -34,7 +34,7 @@ plot(pc2model$x, col = rgb(0, 0, 0, 0.3), pch = 19, main = "Kennard-Stone (synth
 grid()
 
 
-ks <- kenStone(proc[8:1408], 10, 'euclid')
+ks <- kenStone(proc[8:1408], 20, 'euclid')
 ks
 
 points(pc2model$x[ks$model, ], col = "red", pch = 19, cex = 1.4)
@@ -46,12 +46,18 @@ plot(pc2smodel$x, col = rgb(0, 0, 0, 0.3), pch = 19, main = "Kennard-Stone (synt
 grid()
 
 
-ks_s <- kenStone(proc_s[8:1408], 10, 'euclid')
+ks_s <- kenStone(proc_s[8:1408], 20, 'euclid')
 ks_s
 
-points(pc2model$x[ks_s$model, ], col = "red", pch = 19, cex = 1.4)
-### - so don't standardise!
+points(pc2smodel$x[ks_s$model, ], col = "red", pch = 19, cex = 1.4)
 
-ks_df<-as_tibble(ks[["model"]])
 
-write_csv(ks2, "data/working/ks250.csv")
+#outputting
+##add row ID
+procID <- mutate(proc, ID = row_number())
+
+ks_df <- procID %>% 
+  filter(ID %in% ks$model)
+
+
+write_csv(ks_df, "ks20.csv")
